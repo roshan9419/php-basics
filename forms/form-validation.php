@@ -51,6 +51,7 @@
             $data = trim($data);
             $data = stripslashes($data);
             $data = htmlspecialchars($data);
+            $data = ucfirst($data); //makes first char upper case
             return $data;
         }
     ?>
@@ -58,38 +59,47 @@
     <h1>PHP Form Validation</h1>
     <p class="error">* Mandatory Fields</p>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-        <b>Name:</b> <input type="text" name="name">
-        <span class="error">*<?php echo $nameErr;?></span>
+        <b>Name</b><span class="error">*</span>
+        <br>
+        <input type="text" name="name">
+        <span class="error"><?php echo $nameErr;?></span>
         <br><br>
         
-        <b>E-mail:</b> <input type="email" name="email">
-        <span class="error">*<?php echo $emailErr;?></span>
+        <b>E-mail</b><span class="error">*</span>
+        <br>
+        <input type="email" name="email">
+        <span class="error"><?php echo $emailErr;?></span>
         <br><br>
         
-        <b>Website:</b> <input type="text" name="website">
-        <span class="error">*<?php echo $websiteErr;?></span>
+        <b>Website</b><span class="error">*</span>
+        <br>
+        <input type="text" name="website">
+        <span class="error"><?php echo $websiteErr;?></span>
         <br><br>
         
-        <b>Comment:</b> <textarea name="comment" rows="5" color="40"></textarea>
+        <b>Comment</b>
+        <br>
+        <textarea name="comment" rows="5" cols="50"></textarea>
         <br><br>
         
-        <b>Gender:</b>
-        <input type="radio" name="gender" value="female"> Female
-        <input type="radio" name="gender" value="male"> Male
-        <input type="radio" name="gender" value="other"> Other
-        <span class="error">*<?php echo $genderErr;?></span>
+        <b>Gender:</b><span class="error">*</span>
+        <br>
+        <input type="radio" name="gender" value="female" <?php if (isset($gender) && strtolower($gender)=="female") echo "checked"; ?>> Female
+        <input type="radio" name="gender" value="male" <?php if (isset($gender) && strtolower($gender)=="male") echo "checked"; ?>> Male
+        <input type="radio" name="gender" value="other" <?php if (isset($gender) && strtolower($gender)=="other") echo "checked"; ?>> Other
+        <span class="error"><?php echo $genderErr;?></span>
         <br><br>
-        
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
     <?php
     echo "<hr><h2>Your Input</h2>";
-    echo "<br><b>Name:</b>".$name;
-    echo "<br><b>E-mail:</b>".$email;
-    echo "<br><b>Website:</b>".$website;
-    echo "<br><b>Gender:</b>".$gender;
-    echo "<br><b>Comment:</b>".$comment;
+    echo "<br><b>Name:</b> ".$name;
+    echo "<br><b>E-mail:</b> ".$email;
+    echo "<br><b>Website:</b> ".$website;
+    echo "<br><b>Gender:</b> ".$gender;
+    echo "<br><b>Comment:</b> ".$comment;
     ?>
 
 </body>
