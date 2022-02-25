@@ -5,12 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <title>Form Validation</title>
+    <title>Form Validation IsSet()</title>
 </head>
 <body>
     <style>
         body {
             padding: 20px;
+        }
+        .success {
+            color: green;
         }
         .error {
             color: red;
@@ -21,6 +24,7 @@
         // error variables
         $nameErr = $emailErr = $websiteErr = $genderErr = "";
         $name = $email = $gender = $comment = $website = "";
+        $anyError = false;
         
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (empty($_POST["name"])) {
@@ -48,6 +52,8 @@
             }
             // comment not mandatory
             $comment = test_input($_POST["comment"]);
+            $anyError = ($nameErr != "" || $emailErr != "" || $websiteErr != "" || $genderErr != "");
+            // echo var_dump($anyError);
         }
 
         function test_input($data) {
@@ -69,19 +75,19 @@
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <b>Name</b><span class="error">*</span>
         <br>
-        <input type="text" name="name">
+        <input type="text" name="name" value=<?php if (isset($name) && $anyError) echo $name; else echo "";?>>
         <span class="error"><?php echo $nameErr;?></span>
         <br><br>
         
         <b>E-mail</b><span class="error">*</span>
         <br>
-        <input type="text" name="email">
+        <input type="text" name="email" value=<?php if (isset($email) && $anyError) echo $email; else echo "";?>>
         <span class="error"><?php echo $emailErr;?></span>
         <br><br>
         
         <b>Website</b><span class="error">*</span>
         <br>
-        <input type="text" name="website">
+        <input type="text" name="website" value=<?php if (isset($website) && $anyError) echo $website; else echo "";?>>
         <span class="error"><?php echo $websiteErr;?></span>
         <br><br>
         
@@ -92,22 +98,27 @@
         
         <b>Gender:</b><span class="error">*</span>
         <br>
-        <input type="radio" name="gender" value="female" <?php if (isset($gender) && strtolower($gender)=="female") echo "checked"; ?>> Female
-        <input type="radio" name="gender" value="male" <?php if (isset($gender) && strtolower($gender)=="male") echo "checked"; ?>> Male
-        <input type="radio" name="gender" value="other" <?php if (isset($gender) && strtolower($gender)=="other") echo "checked"; ?>> Other
+        <input type="radio" name="gender" value="female" <?php if (isset($gender) && $anyError && strtolower($gender)=="female") echo "checked"; ?>> Female
+        <input type="radio" name="gender" value="male" <?php if (isset($gender) && $anyError && strtolower($gender)=="male") echo "checked"; ?>> Male
+        <input type="radio" name="gender" value="other" <?php if (isset($gender) && $anyError && strtolower($gender)=="other") echo "checked"; ?>> Other
         <span class="error"><?php echo $genderErr;?></span>
         <br><br>
 
         <button type="submit" class="btn btn-primary">Submit</button>
+        <span class="success"><?php if (!$anyError && strlen($name) != 0) echo "Successfully Submitted" ?></span>
     </form>
 
     <?php
-    echo "<hr><h2>Your Input</h2>";
-    echo "<br><b>Name:</b> ".$name;
-    echo "<br><b>E-mail:</b> ".$email;
-    echo "<br><b>Website:</b> ".$website;
-    echo "<br><b>Gender:</b> ".$gender;
-    echo "<br><b>Comment:</b> ".$comment;
+        // check if any error, and is not the first time when screen loaded
+        if (!$anyError && strlen($name) != 0) {
+            echo "<hr><h2>Your Input</h2>";
+            echo "<br><b>Name:</b> ".$name;
+            echo "<br><b>E-mail:</b> ".$email;
+            echo "<br><b>Website:</b> ".$website;
+            echo "<br><b>Gender:</b> ".$gender;
+            if (strlen($comment) != 0)
+                echo "<br><b>Comment:</b> ".$comment;
+        }
     ?>
 
 </body>
