@@ -1,0 +1,16 @@
+Hello, this is first line
+followed by second line
+and 3rd line....
+-------Thanks------
+
+Q1: What is PHP?
+(A) Framework
+(B) Language
+(C) Database
+(D) None of the above
+
+Q2: Laravel is the Framework for which Language?
+(A) Javascript
+(B) Dart
+(C) PHP
+(D) Java
